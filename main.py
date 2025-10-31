@@ -1,5 +1,7 @@
+from core.logic import Stockfish
+
 def main():
-    print("Hello from chess-bot!")
+    Stockfish()
 
 
 if __name__ == "__main__":
