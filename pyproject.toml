@@ -1,7 +1,7 @@
 [project]
 name = "chess-bot"
 version = "0.1.0"
-description = "Add your description here"
+description = "Code for a chess robot made from old 3D printer"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
