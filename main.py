@@ -1,4 +1,4 @@
-from core.logic import Stockfish
+# from core.logic import Stockfish
 
 
 import serial
