@@ -15,25 +15,28 @@ def Stockfish():
     print(board.outcome())
     engine.quit()
 
+
 class ChessLogic:
     def __init__(self) -> None:
-        self.engine: chess.engine.SimpleEngine = chess.engine.SimpleEngine.popen_uci("stockfish")
+        self.engine: chess.engine.SimpleEngine = chess.engine.SimpleEngine.popen_uci(
+            "stockfish"
+        )
         self.board: chess.Board = chess.Board()
 
-    def __del__(self) ->None:
+    def __del__(self) -> None:
         self.engine.close()
 
     def get_winner(self) -> str:
         outcome = self.board.outcome()
         if outcome is None:
-            return 'Game not over yet'
+            return "Game not over yet"
 
-        if (outcome.winner == chess.WHITE):
-            return 'White wins'
-        elif (outcome.winner == chess.BLACK):
-            return 'Black wins'
+        if outcome.winner == chess.WHITE:
+            return "White wins"
+        elif outcome.winner == chess.BLACK:
+            return "Black wins"
         else:
-            return 'Draw'
+            return "Draw"
 
     # # Returns the board (useful for getting game result and such)
     # def get_board(self):
@@ -45,7 +48,7 @@ class ChessLogic:
     def user_move(self, move: str) -> bool:
         try:
             m = chess.Move.from_uci(move)
-            if (m in self.board.legal_moves):
+            if m in self.board.legal_moves:
                 self.board.push(m)
                 return True
             else:
@@ -55,5 +58,5 @@ class ChessLogic:
 
     # Get move from computer
     # returns a string move like above: a1b2
-    def get_move(self) ->str:
-        return ''
+    def get_move(self) -> str:
+        return ""

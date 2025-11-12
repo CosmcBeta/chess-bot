@@ -34,21 +34,37 @@ from core.chess_logic import ChessLogic
 #         except chess.InvalidMoveError:
 #             return False
 
+
 @pytest.fixture
 def logic():
     return ChessLogic()
 
 
-def test_get_winner_still_playing(logic):
-    assert logic.get_winner() == 'Game not over yet'
-
-@pytest.mark.parametrize('invalid_move', [(''), ('weoijfqiuwehfqwdfadjkhvqwefgyyibegwfggrehu'), ('a1'), ('a1a9'), ('a1a0'), ('gggg'), ('something aint right'), ('ahhhhhhhhh'), ('j2d4'), ('a11p')])
-
-
+@pytest.mark.parametrize(
+    "invalid_move",
+    [
+        (""),
+        ("weoijfqiuwehfqwdfadjkhvqwefgyyibegwfggrehu"),
+        ("a1"),
+        ("a1a9"),
+        ("a1a0"),
+        ("gggg"),
+        ("something aint right"),
+        ("ahhhhhhhhh"),
+        ("j2d4"),
+        ("a11p"),
+    ],
+)
 def test_user_move_invalid(logic, invalid_move):
     assert not logic.user_move(invalid_move)
 
-@pytest.mark.parametrize('valid_move', [('a1a1'), ('a1a2'), ('a1b5'), ('a1a8'), ('a1g6'), ('g3d8')])
 
+@pytest.mark.parametrize(
+    "valid_move", [("a1a1"), ("a1a2"), ("a1b5"), ("a1a8"), ("a1g6"), ("g3d8")]
+)
 def test_user_move_valid(logic, valid_move):
     assert not logic.user_move(valid_move)
+
+
+def test_get_winner_still_playing(logic):
+    assert logic.get_winner() == "Game not over yet"
