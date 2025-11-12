@@ -1,4 +1,4 @@
-from core.chess_logic import ChessLogic
+from core.chess_logic import ChessLogic, Stockfish
 
 
 import serial
@@ -29,7 +29,8 @@ def main_temp():
     ser.close()
 
 def main() -> None:
-    chess_logic = ChessLogic()
+    # chess_logic = ChessLogic()
+    Stockfish()
 
 
 
