@@ -57,6 +57,20 @@ class ChessLogic:
             return False
 
     # Get move from computer
+    # Plays and returns the computers move
     # returns a string move like above: a1b2
-    def get_move(self) -> str:
-        return ""
+    # need to check for No legal Move which would just be an empty string
+    def computer_move(self) -> str:
+        result = self.engine.play(self.board, chess.engine.Limit(time=3))
+        self.board.push(result.move)
+        if result.move is not None:
+            return result.move.uci()
+        else:
+            return ""
+
+    def set_board_from_fen(self, fen:str)->bool:
+        try:
+            self.board.set_board_fen(fen)
+            return True
+        except ValueError:
+            return False

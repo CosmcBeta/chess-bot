@@ -2,39 +2,6 @@ import pytest
 
 from core.chess_logic import ChessLogic
 
-# class ChessLogic:
-#     def __init__(self) -> None:
-#         self.engine: chess.engine.SimpleEngine = chess.engine.SimpleEngine.popen_uci("stockfish")
-#         self.board: chess.Board = chess.Board()
-
-#     def get_winner(self) -> str:
-#         outcome = self.board.outcome()
-#         if outcome is None:
-#             return 'Game not over yet'
-
-#         if (outcome.winner == chess.WHITE):
-#             return 'White wins'
-#         elif (outcome.winner == chess.BLACK):
-#             return 'Black wins'
-#         else:
-#             return 'Draw'
-
-#     # # Returns the board (useful for getting game result and such)
-#     # def get_board(self):
-#     #     pass
-
-#     # Input user move
-#     # going to be a string like a1b2 moving the piece from a1 to b2
-#     # returns false is error, otherwise returns true
-#     def user_move(self, move: str) -> bool:
-#         try:
-#             m = chess.Move.from_uci(move)
-#             self.board.push(m)
-#             return True
-#         except chess.InvalidMoveError:
-#             return False
-
-
 @pytest.fixture
 def logic():
     return ChessLogic()
@@ -68,3 +35,54 @@ def test_user_move_valid(logic, valid_move):
 
 def test_get_winner_still_playing(logic):
     assert logic.get_winner() == "Game not over yet"
+
+def test_empty_fen_string(logic):
+    assert not logic.set_board_from_fen("")
+
+def test_valid_starting_position_fen(logic):
+    fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    assert logic.set_board_from_fen(fen)
+
+@pytest.mark.parametrize("fen", [
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR",
+    "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R",
+    "8/8/8/8/8/8/8/8"
+])
+def test_multiple_valid_fens(logic, fen):
+    assert logic.set_board_from_fen(fen)
+
+@pytest.mark.parametrize("fen", [
+    "8/8/8/8/8/8/8/K7",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+])
+def test_boundary_valid_fens(logic, fen):
+    assert logic.set_board_from_fen(fen)
+
+@pytest.mark.parametrize("invalid_fen", [
+    "invalid",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR/8",
+    "rnbqkbnr/ppppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNX",
+    "ahuyhyhhhhh"
+])
+def test_invalid_fen_strings(logic, invalid_fen):
+    assert not logic.set_board_from_fen(invalid_fen)
+
+def test_value_error_returns_false(logic):
+    assert not logic.set_board_from_fen("totally_invalid_fen")
+
+def test_consecutive_valid_fen_calls(logic):
+    fen1 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    fen2 = "8/8/8/8/8/8/8/8"
+
+    assert logic.set_board_from_fen(fen1)
+    assert logic.set_board_from_fen(fen2)
+
+def test_valid_then_invalid_fen(logic):
+    valid_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    invalid_fen = "invalid"
+
+    assert logic.set_board_from_fen(valid_fen)
+    assert not logic.set_board_from_fen(invalid_fen)
