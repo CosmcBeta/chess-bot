@@ -1,11 +1,11 @@
-# from core.logic import Stockfish
+from core.chess_logic import Stockfish
 
 
 import serial
 import time
 
 
-def main():
+def main_temp():
     # Stockfish()
     ser = serial.Serial("/dev/cu.usbmodem1101", 250000, timeout=2)
 
@@ -27,6 +27,11 @@ def main():
         print(ser.readline().decode())
 
     ser.close()
+
+
+def main() -> None:
+    # chess_logic = ChessLogic()
+    Stockfish()
 
 
 if __name__ == "__main__":
