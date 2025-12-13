@@ -68,7 +68,7 @@ class ChessLogic:
         else:
             return ""
 
-    def set_board_from_fen(self, fen:str)->bool:
+    def set_board_from_fen(self, fen: str) -> bool:
         try:
             self.board.set_board_fen(fen)
             return True
